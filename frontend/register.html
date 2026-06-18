@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskApp – Register</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <h1 class="brand">TaskApp</h1>
+      <h2>Register</h2>
+      <div id="error-msg" class="alert hidden"></div>
+      <form id="register-form">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Register</button>
+      </form>
+      <p class="switch-link">Already have an account? <a href="login.html">Login</a></p>
+    </div>
+  </div>
+  <script src="api.js"></script>
+  <script>
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const email    = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        await registerUser({ username, email, password });
+        window.location.href = 'login.html';
+      } catch (err) {
+        const detail = err.responseData
+          ? JSON.stringify(err.responseData)
+          : 'Registration failed. Try again.';
+        showError(detail);
+      }
+    });
+
+    function showError(msg) {
+      const el = document.getElementById('error-msg');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
